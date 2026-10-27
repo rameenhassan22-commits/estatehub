@@ -48,9 +48,10 @@ export default function Login() {
           Login
         </button>
       </form>
-      <p style={{ marginTop: 10 }}>
-        Don't have an account? <Link to="/register">Register Agency</Link>
-      </p>
+            <div style={{ marginTop: 20, display: "flex", justifyContent: "space-between", fontSize: 14 }}>
+        <Link to="/register-customer" style={{ color: "#28a745", fontWeight: "bold" }}>Register as Customer</Link>
+        <Link to="/register-agency" style={{ color: "#007bff", fontWeight: "bold" }}>Register an Agency</Link>
+      </div>
     </div>
   );
 }
