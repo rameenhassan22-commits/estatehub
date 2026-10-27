@@ -2,9 +2,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
-import Properties from "./pages/Properties"; // <-- IMPORT THIS
-
-const Dashboard = () => <h1>Agency Dashboard</h1>;
+import Properties from "./pages/Properties";
+import AgencyDashboard from "./pages/AgencyDashboard";
+import PropertyForm from "./pages/PropertyForm"; // <-- IMPORT THIS
 
 export default function App() {
   return (
@@ -12,14 +12,24 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<h1>Register Page (Coming Soon)</h1>} />
+          <Route path="/" element={<Properties />} />
           
-          {/* Use the new Properties component */}
-          <Route path="/" element={<Properties />} /> {/* <-- UPDATE THIS */}
-
           <Route path="/dashboard" element={
             <ProtectedRoute roles={["agency_admin", "agent"]}>
-              <Dashboard />
+              <AgencyDashboard />
+            </ProtectedRoute>
+          } />
+
+          {/* ADD THESE TWO ROUTES */}
+          <Route path="/properties/new" element={
+            <ProtectedRoute roles={["agency_admin", "agent"]}>
+              <PropertyForm />
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/properties/:id/edit" element={
+            <ProtectedRoute roles={["agency_admin", "agent"]}>
+              <PropertyForm />
             </ProtectedRoute>
           } />
         </Routes>
