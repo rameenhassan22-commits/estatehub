@@ -4,7 +4,9 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
 import Properties from "./pages/Properties";
 import AgencyDashboard from "./pages/AgencyDashboard";
-import PropertyForm from "./pages/PropertyForm"; // <-- IMPORT THIS
+import PropertyForm from "./pages/PropertyForm";
+import PropertyDetail from "./pages/PropertyDetail"; // <-- IMPORT
+import Inquiries from "./pages/Inquiries"; // <-- IMPORT
 
 export default function App() {
   return (
@@ -14,13 +16,15 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Properties />} />
           
+          {/* Public Property Details */}
+          <Route path="/properties/:id" element={<PropertyDetail />} />
+
           <Route path="/dashboard" element={
             <ProtectedRoute roles={["agency_admin", "agent"]}>
               <AgencyDashboard />
             </ProtectedRoute>
           } />
 
-          {/* ADD THESE TWO ROUTES */}
           <Route path="/properties/new" element={
             <ProtectedRoute roles={["agency_admin", "agent"]}>
               <PropertyForm />
@@ -30,6 +34,13 @@ export default function App() {
           <Route path="/properties/:id/edit" element={
             <ProtectedRoute roles={["agency_admin", "agent"]}>
               <PropertyForm />
+            </ProtectedRoute>
+          } />
+
+          {/* Agency Inbox */}
+          <Route path="/inquiries" element={
+            <ProtectedRoute roles={["agency_admin", "agent"]}>
+              <Inquiries />
             </ProtectedRoute>
           } />
         </Routes>
