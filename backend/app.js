@@ -9,6 +9,7 @@ import healthRoutes from "./routes/healthRoutes.js";
 import { notFound, errorHandler } from "./middleware/error.js";
 import authRoutes from "./routes/authRoutes.js";
 import { apiLimiter } from "./middleware/rateLimiters.js";
+import propertyRoutes from "./routes/propertyRoutes.js";
 
 export const app = express();
 
@@ -43,7 +44,7 @@ app.use(express.json({ limit: "100kb" })); // refuse giant bodies
 app.use("/api/health", healthRoutes);
 app.use("/api", apiLimiter); // global rate limit for the whole API
 app.use("/api/auth", authRoutes);
-
+app.use("/api/properties", propertyRoutes);
 // 4. Errors (must be LAST)
 app.use(notFound);
 app.use(errorHandler);
