@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+/* Design tokens. Change a colour here and the whole app follows. */
+@theme {
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+
+  --color-brand-50: #effaf6;
+  --color-brand-100: #d6f2e6;
+  --color-brand-200: #b0e4cf;
+  --color-brand-300: #7dd0b3;
+  --color-brand-400: #46b693;
+  --color-brand-500: #239c7a;
+  --color-brand-600: #187d62;
+  --color-brand-700: #156451;
+  --color-brand-800: #145042;
+  --color-brand-900: #124238;
+
+  --color-sand-50: #faf8f4;
+  --color-sand-100: #f3efe6;
+  --color-sand-200: #e7e0cf;
+}
+
+@layer base {
+  body {
+    @apply bg-sand-50 font-sans text-slate-800 antialiased;
+  }
+  h1,
+  h2 {
+    font-family: var(--font-display);
+    @apply tracking-tight text-slate-900;
+  }
+}
+
+/* Reusable building blocks, so pages stay short and consistent */
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-primary {
+    @apply bg-brand-700 text-white shadow-sm hover:bg-brand-800 active:bg-brand-900;
+  }
+  .btn-secondary {
+    @apply border border-slate-300 bg-white text-slate-700 hover:bg-slate-50;
+  }
+  .btn-danger {
+    @apply bg-red-600 text-white hover:bg-red-700;
+  }
+  .btn-ghost {
+    @apply text-slate-600 hover:bg-slate-100;
+  }
+  .input {
+    @apply w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 transition placeholder:text-slate-400 focus:border-brand-600 focus:ring-4 focus:ring-brand-600/15 focus:outline-none;
+  }
+  .input-error {
+    @apply border-red-500 focus:border-red-500 focus:ring-red-500/15;
+  }
+  .card {
+    @apply rounded-2xl border border-slate-200 bg-white shadow-sm;
+  }
+}
