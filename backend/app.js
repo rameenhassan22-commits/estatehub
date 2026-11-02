@@ -10,6 +10,11 @@ import { notFound, errorHandler } from "./middleware/error.js";
 import authRoutes from "./routes/authRoutes.js";
 import { apiLimiter } from "./middleware/rateLimiters.js";
 import propertyRoutes from "./routes/propertyRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import inquiryRoutes from "./routes/inquiryRoutes.js";
+import tenantRoutes from "./routes/tenantRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
 
 export const app = express();
 
@@ -45,6 +50,12 @@ app.use("/api/health", healthRoutes);
 app.use("/api", apiLimiter); // global rate limit for the whole API
 app.use("/api/auth", authRoutes);
 app.use("/api/properties", propertyRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/inquiries", inquiryRoutes);
+app.use("/api/tenants", tenantRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+
 // 4. Errors (must be LAST)
 app.use(notFound);
 app.use(errorHandler);
