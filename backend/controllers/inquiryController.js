@@ -2,6 +2,9 @@ import Inquiry from "../models/Inquiry.js";
 import Property from "../models/Property.js";
 import { inquiryScopeFor as scopeFor } from "../utils/inquiryScope.js";
 import { emitToRooms } from "../realtime/socket.js";
+import User from "../models/User.js";
+import { sendMail, sendInBackground } from "../utils/mailer.js";
+import { newInquiryEmail } from "../utils/emailTemplates.js";
 
 // 1. POST /api/inquiries (customer only)
 export const createInquiry = async (req, res) => {
@@ -28,7 +31,16 @@ export const createInquiry = async (req, res) => {
     message: message.slice(0, 120),
     createdAt: inquiry.createdAt,
   });
-
+  // EMAIL: also notify the listing owner (background - a mail problem must not fail the inquiry)
+  const owner = await User.findById(property.createdBy).select("name email");
+  if (owner) {
+    sendInBackground(
+      sendMail({
+        to: owner.email,
+        ...newInquiryEmail({ recipientName: owner.name, customerName: req.user.name, propertyTitle: property.title, message }),
+      })
+    );
+  }
   res.status(201).json(inquiry);
 };
 

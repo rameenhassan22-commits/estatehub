@@ -1,5 +1,7 @@
 import User from "../models/User.js";
-
+import Tenant from "../models/Tenant.js";
+import { sendMail, sendInBackground } from "../utils/mailer.js";
+import { teamInviteEmail } from "../utils/emailTemplates.js";
 // POST /api/users (agency_admin only)
 export const createAgencyUser = async (req, res) => {
   const { name, email, password, role } = req.body;
@@ -16,6 +18,8 @@ export const createAgencyUser = async (req, res) => {
     tenantId: req.user.tenantId, // the agent gets the ADMIN's tenantId
   });
 
+  const tenant = await Tenant.findById(req.user.tenantId).select("name");
+  sendInBackground(sendMail({ to: email, ...teamInviteEmail(user, tenant, req.user) }));
   res.status(201).json({
     _id: user._id,
     name: user.name,

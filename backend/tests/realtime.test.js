@@ -11,7 +11,7 @@ import http from "node:http";
 import { io as connect } from "socket.io-client";
 
 const { attachSocket, emitToRooms, closeSocket } = await import("../realtime/socket.js");
-
+const { welcomeCustomerEmail, newInquiryEmail } = await import("../utils/emailTemplates.js");
 // token "adminA" -> admin of agency A, "adminB" -> admin of agency B, "cust" -> a customer
 const USERS = {
   adminA: { _id: "u-adminA", role: "agency_admin", tenantId: "tA" },
@@ -78,4 +78,14 @@ test("a customer receives status updates addressed to them, once even if two roo
   await new Promise((r) => setTimeout(r, 200));
   assert.equal(count, 1);
   c.close();
+});
+test("welcome email escapes HTML in the user's name", () => {
+  const mail = welcomeCustomerEmail({ name: '<script>alert(1)</script>' });
+  assert.ok(!mail.html.includes("<script>"));
+  assert.ok(mail.html.includes("&lt;script&gt;"));
+});
+
+test("new-inquiry email escapes the customer's message", () => {
+  const mail = newInquiryEmail({ recipientName: "Sara", customerName: "Ali", propertyTitle: "Villa", message: '<img src=x onerror=alert(1)>' });
+  assert.ok(!mail.html.includes("<img"));
 });

@@ -1,6 +1,8 @@
 import User from "../models/User.js";
 import Tenant from "../models/Tenant.js";
 import { generateToken } from "../utils/generateToken.js";
+import { sendMail, sendInBackground } from "../utils/mailer.js";
+import { welcomeAgencyEmail, welcomeCustomerEmail } from "../utils/emailTemplates.js";
 
 // "Prime Estate!" -> "prime-estate"
 const slugify = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
@@ -39,6 +41,7 @@ export const registerAgency = async (req, res) => {
     });
     // THIS is where an agency admin gets its tenantId
     const admin = await User.create({ name, email, password, role: "agency_admin", tenantId: tenant._id });
+    sendInBackground(sendMail({ to: email, ...welcomeAgencyEmail(admin, tenant) })); // welcome email, never blocks sign-up
     res.status(201).json(await authResponse(admin, { tenant }));
   } catch (err) {
     // If the 2nd write fails, undo the 1st so we never leave an orphan agency
@@ -56,6 +59,7 @@ export const registerCustomer = async (req, res) => {
   }
 
   const user = await User.create({ name, email, password, role: "customer" });
+  sendInBackground(sendMail({ to: email, ...welcomeCustomerEmail(user) }));
   res.status(201).json(await authResponse(user));
 };
 
