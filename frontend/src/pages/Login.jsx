@@ -1,38 +1,87 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { login } from "../features/auth/authSlice";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "react-hot-toast";
+import { Loader2, Search, Building2 } from "lucide-react";
+import { Field, PasswordField } from "../components/ui/Field";
 import { ErrorBanner } from "../components/ui/Feedback";
+import { login } from "../features/auth/authSlice";
+import { loginSchema } from "../validation/schemas";
+import { applyServerErrors } from "../lib/forms";
 
-// TEMPORARY quick-login form for testing layouts. Step 13 replaces it with the real validated page.
 export default function Login() {
   const dispatch = useDispatch();
-  const [email, setEmail] = useState("admin@prime.test");
-  const [password, setPassword] = useState("Demo@1234");
-  const [error, setError] = useState("");
+  const [formError, setFormError] = useState("");
 
-  const submit = async (e, creds) => {
-    e?.preventDefault();
-    const res = await dispatch(login(creds || { email, password }));
-    if (res.error) setError(res.payload.message);
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { email: "", password: "" },
+  });
+
+  const onSubmit = async (values) => {
+    setFormError("");
+    try {
+      const data = await dispatch(login(values)).unwrap();
+      toast.success(`Welcome back, ${data.user.name.split(" ")[0]}!`);
+      // No navigate() here: AuthLayout sees the user in the store and redirects by role.
+    } catch (payload) {
+      setFormError(applyServerErrors(payload, setError));
+    }
   };
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold">Temporary login</h1>
-      <form onSubmit={submit} className="mt-6 space-y-4">
-        <ErrorBanner>{error}</ErrorBanner>
-        <input className="input" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input className="input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        <button className="btn btn-primary w-full">Log in</button>
+    <>
+      <h1 className="text-3xl font-bold">Welcome back</h1>
+      <p className="mt-2 text-slate-500">Log in to manage your listings, inquiries and saved searches.</p>
+
+      <form onSubmit={handleSubmit(onSubmit)} noValidate className="mt-8 space-y-5">
+        <ErrorBanner>{formError}</ErrorBanner>
+
+        <Field
+          label="Email address"
+          type="email"
+          autoComplete="email"
+          placeholder="you@example.com"
+          error={errors.email}
+          {...register("email")}
+        />
+        <PasswordField
+          label="Password"
+          autoComplete="current-password"
+          placeholder="Your password"
+          error={errors.password}
+          {...register("password")}
+        />
+
+        <button type="submit" disabled={isSubmitting} className="btn btn-primary w-full py-3">
+          {isSubmitting && <Loader2 size={18} className="animate-spin" />}
+          {isSubmitting ? "Logging in..." : "Log in"}
+        </button>
       </form>
-      <p className="mt-6 text-sm text-slate-500">Quick login:</p>
-      <div className="mt-2 flex flex-wrap gap-2">
-        {[["Admin", "admin@prime.test"], ["Agent", "agent@prime.test"], ["Customer", "customer@demo.test"]].map(([label, mail]) => (
-          <button key={mail} type="button" className="btn btn-secondary" onClick={() => submit(null, { email: mail, password: "Demo@1234" })}>
-            {label}
-          </button>
-        ))}
+
+      <div className="my-8 flex items-center gap-3 text-xs font-medium tracking-wide text-slate-400 uppercase">
+        <span className="h-px flex-1 bg-slate-200" /> New to EstateHub? <span className="h-px flex-1 bg-slate-200" />
       </div>
-    </div>
+
+      <div className="grid gap-3 sm:grid-cols-2">
+        <Link to="/register-customer" className="card group p-4 transition hover:border-brand-500 hover:shadow-md">
+          <Search size={20} className="text-brand-700" />
+          <p className="mt-2 text-sm font-semibold text-slate-900">I'm looking for a property</p>
+          <p className="text-xs text-slate-500">Create a customer account</p>
+        </Link>
+        <Link to="/register-agency" className="card group p-4 transition hover:border-brand-500 hover:shadow-md">
+          <Building2 size={20} className="text-brand-700" />
+          <p className="mt-2 text-sm font-semibold text-slate-900">I represent an agency</p>
+          <p className="text-xs text-slate-500">Start your agency workspace</p>
+        </Link>
+      </div>
+    </>
   );
 }

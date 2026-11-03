@@ -11,6 +11,8 @@ import AuthLayout from "./layouts/AuthLayout";
 import DashboardLayout from "./layouts/DashboardLayout";
 
 import Login from "./pages/Login";
+import RegisterCustomer from "./pages/RegisterCustomer";
+import RegisterAgency from "./pages/RegisterAgency";
 import NotFound from "./pages/NotFound";
 import Stub from "./pages/Stub";
 
@@ -31,8 +33,8 @@ export default function App() {
         {/* 1. Auth pages: split-screen layout */}
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<Login />} />
-          <Route path="/register-customer" element={<Stub title="Register as customer" step={13} />} />
-          <Route path="/register-agency" element={<Stub title="Register your agency" step={13} />} />
+          <Route path="/register-customer" element={<RegisterCustomer />} />
+          <Route path="/register-agency" element={<RegisterAgency />} />
         </Route>
 
         {/* 2. Public site: navbar + footer */}
