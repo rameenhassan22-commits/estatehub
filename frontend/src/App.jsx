@@ -10,6 +10,10 @@ import MainLayout from "./layouts/MainLayout";
 import AuthLayout from "./layouts/AuthLayout";
 import DashboardLayout from "./layouts/DashboardLayout";
 
+import Home from "./pages/Home";
+import Properties from "./pages/Properties";
+import PropertyDetail from "./pages/PropertyDetail";
+import AgencyPage from "./pages/AgencyPage";
 import Login from "./pages/Login";
 import RegisterCustomer from "./pages/RegisterCustomer";
 import RegisterAgency from "./pages/RegisterAgency";
@@ -39,10 +43,10 @@ export default function App() {
 
         {/* 2. Public site: navbar + footer */}
         <Route element={<MainLayout />}>
-          <Route path="/" element={<Stub title="Home" step={14} />} />
-          <Route path="/properties" element={<Stub title="Browse properties" step={14} />} />
-          <Route path="/properties/:id" element={<Stub title="Property detail" step={14} />} />
-          <Route path="/agency/:slug" element={<Stub title="Agency page" step={14} />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/properties" element={<Properties />} />
+          <Route path="/properties/:id" element={<PropertyDetail />} />
+          <Route path="/agency/:slug" element={<AgencyPage />} />
 
           {/* customer only */}
           <Route element={<ProtectedRoute roles={[ROLES.CUSTOMER]} />}>
