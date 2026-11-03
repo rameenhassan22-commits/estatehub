@@ -24,6 +24,7 @@ import Overview from "./pages/dashboard/Overview";
 import ManageProperties from "./pages/dashboard/ManageProperties";
 import PropertyForm from "./pages/dashboard/PropertyForm";
 import Team from "./pages/dashboard/Team";
+import { useRealtime } from "./hooks/useRealtime";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ export default function App() {
     if (hasToken) dispatch(fetchMe());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useRealtime(); // Socket.IO: live inquiry notifications while logged in
 
   return (
     <BrowserRouter>
