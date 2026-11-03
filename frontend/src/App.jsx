@@ -17,8 +17,9 @@ import AgencyPage from "./pages/AgencyPage";
 import Login from "./pages/Login";
 import RegisterCustomer from "./pages/RegisterCustomer";
 import RegisterAgency from "./pages/RegisterAgency";
+import Inquiries from "./pages/Inquiries";
+import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
-import Stub from "./pages/Stub";
 import Overview from "./pages/dashboard/Overview";
 import ManageProperties from "./pages/dashboard/ManageProperties";
 import PropertyForm from "./pages/dashboard/PropertyForm";
@@ -54,7 +55,7 @@ export default function App() {
 
           {/* customer only */}
           <Route element={<ProtectedRoute roles={[ROLES.CUSTOMER]} />}>
-            <Route path="/my-inquiries" element={<Stub title="My inquiries" step={16} />} />
+            <Route path="/my-inquiries" element={<Inquiries />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />
@@ -67,7 +68,7 @@ export default function App() {
             <Route path="/dashboard/properties" element={<ManageProperties />} />
             <Route path="/dashboard/properties/new" element={<PropertyForm />} />
             <Route path="/dashboard/properties/:id/edit" element={<PropertyForm />} />
-            <Route path="/dashboard/inquiries" element={<Stub title="Inbox" step={16} />} />
+            <Route path="/dashboard/inquiries" element={<Inquiries />} />
 
             {/* agency admin only (agents get the 403 page) */}
             <Route element={<ProtectedRoute roles={[ROLES.AGENCY_ADMIN]} />}>
@@ -79,7 +80,7 @@ export default function App() {
         {/* 4. Platform owner */}
         <Route element={<ProtectedRoute roles={[ROLES.SUPER_ADMIN]} />}>
           <Route element={<DashboardLayout />}>
-            <Route path="/admin" element={<Stub title="Platform overview" step={16} />} />
+            <Route path="/admin" element={<AdminDashboard />} />
           </Route>
         </Route>
       </Routes>
