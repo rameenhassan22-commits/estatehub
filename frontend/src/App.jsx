@@ -1,58 +1,78 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { login } from "./features/auth/authSlice";
-import { useAuth } from "./hooks/useAuth";
-import { api, errorMessage } from "./api/axios";
-import { formatPrice } from "./lib/format";
+import { useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Toaster } from "react-hot-toast";
+import { fetchMe } from "./features/auth/authSlice";
+import { ROLES, STAFF_ROLES } from "./lib/roles";
+
+import ProtectedRoute from "./components/ProtectedRoute";
+import MainLayout from "./layouts/MainLayout";
+import AuthLayout from "./layouts/AuthLayout";
+import DashboardLayout from "./layouts/DashboardLayout";
+
+import Login from "./pages/Login";
+import NotFound from "./pages/NotFound";
+import Stub from "./pages/Stub";
 
 export default function App() {
   const dispatch = useDispatch();
-  const { user, tenant, isAuthenticated, logout } = useAuth();
-  const [log, setLog] = useState([]);
-  // If the page ever reloads, this time changes. It proves a wrong password does NOT reload the page.
-  const [loadedAt] = useState(() => new Date().toLocaleTimeString());
-  const say = (m) => setLog((l) => [m, ...l].slice(0, 8));
+  const hasToken = useSelector((s) => Boolean(s.auth.token));
 
-  const doLogin = async (email, password) => {
-    const res = await dispatch(login({ email, password }));
-    say(res.error ? `login failed: ${res.payload.message}` : `login ok: ${email}`);
-  };
-
-  const callTeam = async () => {
-    try {
-      const { data } = await api.get("/users");
-      say(`GET /users ok: ${data.length} team members`);
-    } catch (e) {
-      say(`GET /users failed (${e.response?.status}): ${errorMessage(e)}`);
-    }
-  };
+  // On first load: if a token was saved, ask the server who it belongs to (and whether it is still valid)
+  useEffect(() => {
+    if (hasToken) dispatch(fetchMe());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
-    <main className="mx-auto max-w-xl px-4 py-12">
-      <h1 className="text-3xl font-bold text-brand-800">Step 11: auth logic test</h1>
-      <p className="mt-1 text-sm text-slate-500">Page loaded at {loadedAt} | {formatPrice(25000000)}</p>
+    <BrowserRouter>
+      <Toaster position="top-right" toastOptions={{ duration: 3500 }} />
+      <Routes>
+        {/* 1. Auth pages: split-screen layout */}
+        <Route element={<AuthLayout />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register-customer" element={<Stub title="Register as customer" step={13} />} />
+          <Route path="/register-agency" element={<Stub title="Register your agency" step={13} />} />
+        </Route>
 
-      <div className="card mt-6 p-5">
-        {isAuthenticated ? (
-          <p className="font-semibold text-brand-700">
-            Logged in: {user.name} ({user.role}) {tenant ? `- ${tenant.name}` : ""}
-          </p>
-        ) : (
-          <p className="text-slate-500">Not logged in</p>
-        )}
-      </div>
+        {/* 2. Public site: navbar + footer */}
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Stub title="Home" step={14} />} />
+          <Route path="/properties" element={<Stub title="Browse properties" step={14} />} />
+          <Route path="/properties/:id" element={<Stub title="Property detail" step={14} />} />
+          <Route path="/agency/:slug" element={<Stub title="Agency page" step={14} />} />
 
-      <div className="mt-4 flex flex-wrap gap-2">
-        <button className="btn btn-primary" onClick={() => doLogin("admin@prime.test", "Demo@1234")}>Login admin</button>
-        <button className="btn btn-primary" onClick={() => doLogin("agent@prime.test", "Demo@1234")}>Login agent</button>
-        <button className="btn btn-secondary" onClick={() => doLogin("admin@prime.test", "WrongPass1")}>Wrong password</button>
-        <button className="btn btn-secondary" onClick={callTeam}>Call GET /users</button>
-        <button className="btn btn-danger" onClick={logout}>Logout</button>
-      </div>
+          {/* customer only */}
+          <Route element={<ProtectedRoute roles={[ROLES.CUSTOMER]} />}>
+            <Route path="/my-inquiries" element={<Stub title="My inquiries" step={16} />} />
+          </Route>
 
-      <ul className="mt-6 space-y-1 text-sm text-slate-700">
-        {log.map((m, i) => <li key={i} className="card px-3 py-2">{m}</li>)}
-      </ul>
-    </main>
+          <Route path="*" element={<NotFound />} />
+        </Route>
+
+        {/* 3. Agency workspace: sidebar layout, staff only */}
+        <Route element={<ProtectedRoute roles={STAFF_ROLES} />}>
+          <Route element={<DashboardLayout />}>
+            <Route path="/dashboard" element={<Stub title="Dashboard overview" step={15} />} />
+            <Route path="/dashboard/properties" element={<Stub title="Manage properties" step={15} />} />
+            <Route path="/dashboard/properties/new" element={<Stub title="Add property" step={15} />} />
+            <Route path="/dashboard/properties/:id/edit" element={<Stub title="Edit property" step={15} />} />
+            <Route path="/dashboard/inquiries" element={<Stub title="Inbox" step={16} />} />
+
+            {/* agency admin only (agents get the 403 page) */}
+            <Route element={<ProtectedRoute roles={[ROLES.AGENCY_ADMIN]} />}>
+              <Route path="/dashboard/team" element={<Stub title="Team" step={15} />} />
+            </Route>
+          </Route>
+        </Route>
+
+        {/* 4. Platform owner */}
+        <Route element={<ProtectedRoute roles={[ROLES.SUPER_ADMIN]} />}>
+          <Route element={<DashboardLayout />}>
+            <Route path="/admin" element={<Stub title="Platform overview" step={16} />} />
+          </Route>
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
