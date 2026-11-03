@@ -19,6 +19,10 @@ import RegisterCustomer from "./pages/RegisterCustomer";
 import RegisterAgency from "./pages/RegisterAgency";
 import NotFound from "./pages/NotFound";
 import Stub from "./pages/Stub";
+import Overview from "./pages/dashboard/Overview";
+import ManageProperties from "./pages/dashboard/ManageProperties";
+import PropertyForm from "./pages/dashboard/PropertyForm";
+import Team from "./pages/dashboard/Team";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -59,15 +63,15 @@ export default function App() {
         {/* 3. Agency workspace: sidebar layout, staff only */}
         <Route element={<ProtectedRoute roles={STAFF_ROLES} />}>
           <Route element={<DashboardLayout />}>
-            <Route path="/dashboard" element={<Stub title="Dashboard overview" step={15} />} />
-            <Route path="/dashboard/properties" element={<Stub title="Manage properties" step={15} />} />
-            <Route path="/dashboard/properties/new" element={<Stub title="Add property" step={15} />} />
-            <Route path="/dashboard/properties/:id/edit" element={<Stub title="Edit property" step={15} />} />
+            <Route path="/dashboard" element={<Overview />} />
+            <Route path="/dashboard/properties" element={<ManageProperties />} />
+            <Route path="/dashboard/properties/new" element={<PropertyForm />} />
+            <Route path="/dashboard/properties/:id/edit" element={<PropertyForm />} />
             <Route path="/dashboard/inquiries" element={<Stub title="Inbox" step={16} />} />
 
             {/* agency admin only (agents get the 403 page) */}
             <Route element={<ProtectedRoute roles={[ROLES.AGENCY_ADMIN]} />}>
-              <Route path="/dashboard/team" element={<Stub title="Team" step={15} />} />
+              <Route path="/dashboard/team" element={<Team />} />
             </Route>
           </Route>
         </Route>
