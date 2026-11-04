@@ -1,0 +1,28 @@
+# CD = Continuous Delivery: when CI succeeded on main, ship it.
+#  - Vercel (frontend) deploys by itself through its GitHub integration - nothing to do here.
+#  - Render (backend) auto-deploys too; this workflow is the explicit "deploy only after CI is green" version.
+#    Disable Render's own "Auto-Deploy" and add the secret RENDER_DEPLOY_HOOK_URL
+#    (Render dashboard > your service > Settings > Deploy Hook) to use it.
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: [CI]
+    branches: [main]
+    types: [completed]
+
+jobs:
+  render:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render deploy
+        env:
+          HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "RENDER_DEPLOY_HOOK_URL not set - skipping (Render may be auto-deploying instead)."
+            exit 0
+          fi
+          curl --fail --silent --show-error -X POST "$HOOK"
+          echo "Deploy triggered."

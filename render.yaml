@@ -1,0 +1,33 @@
+# Render "Blueprint": New + > Blueprint > pick your GitHub repo. Render reads this file and creates the API.
+# (The database lives on MongoDB Atlas; the website lives on Vercel.)
+services:
+  - type: web
+    name: estatehub-api
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm ci --omit=dev
+    startCommand: node server.js
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: TRUST_PROXY # Render puts one proxy in front of your app
+        value: "1"
+      - key: LOG_LEVEL
+        value: info
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: MONGO_URI # secret: paste your Atlas connection string in the Render dashboard
+        sync: false
+      - key: JWT_SECRET # secret: Render can generate a strong random value for you
+        generateValue: true
+      - key: CLIENT_URL # your Vercel URL, e.g. https://estatehub.vercel.app
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
