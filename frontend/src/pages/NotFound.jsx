@@ -8,7 +8,7 @@ export default function NotFound() {
         <Compass size={30} />
       </div>
       <h1 className="mt-5 text-5xl font-bold">404</h1>
-      <p className="mt-2 text-slate-500">This page doesn't exist — it may have been moved.</p>
+      <p className="mt-2 text-slate-500">This page doesn't exist it may have been moved.</p>
       <Link to="/" className="btn btn-primary mt-6">Back to home</Link>
     </div>
   );

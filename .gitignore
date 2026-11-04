@@ -1,4 +1,8 @@
-node_modules
+node_modules/
 .env
-dist
+.env.local
+dist/
+build/
 *.log
+.DS_Store
+.vscode/

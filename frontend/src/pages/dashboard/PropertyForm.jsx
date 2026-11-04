@@ -145,8 +145,8 @@ export default function PropertyForm() {
 
         <section className="card p-5 sm:p-6">
           <SelectField label="Status" error={errors.status} className="max-w-xs" {...register("status")}>
-            <option value="available">Available — visible to everyone</option>
-            <option value="draft">Draft — only my team</option>
+            <option value="available">Available visible to everyone</option>
+            <option value="draft">Draft only my team</option>
             <option value="sold">Sold</option>
             <option value="rented">Rented</option>
           </SelectField>

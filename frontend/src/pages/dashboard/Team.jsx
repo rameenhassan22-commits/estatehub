@@ -103,8 +103,8 @@ export default function Team() {
               <PasswordChecklist value={watch("password")} />
             </div>
             <SelectField label="Role" error={errors.role} {...register("role")}>
-              <option value="agent">Agent — manages own listings</option>
-              <option value="agency_admin">Agency admin — full access</option>
+              <option value="agent">Agent manages own listings</option>
+              <option value="agency_admin">Agency admin has full access</option>
             </SelectField>
           </div>
           <button type="submit" disabled={isSubmitting} className="btn btn-primary">

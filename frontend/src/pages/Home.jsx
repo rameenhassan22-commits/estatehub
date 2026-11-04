@@ -8,7 +8,7 @@ import { useAuth } from "../hooks/useAuth";
 
 const STEPS = [
   { icon: Search, title: "Search", text: "Filter by city, type, purpose and price across every agency on the platform." },
-  { icon: MessageSquare, title: "Inquire", text: "Send a message to the agency in one click — no phone tag." },
+  { icon: MessageSquare, title: "Inquire", text: "Send a message to the agency in one click no phone tag." },
   { icon: KeyRound, title: "Move in", text: "Agents follow up, you visit, and you pick the place that fits." },
 ];
 
@@ -63,7 +63,7 @@ export default function Home() {
               <input
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
-                placeholder="City, area or keyword — e.g. Gulberg"
+                placeholder="City, area or keyword e.g. Gulberg"
                 className="input border-transparent bg-slate-50 pl-10"
                 aria-label="Search properties"
               />
@@ -100,7 +100,7 @@ export default function Home() {
         {featured === null ? (
           <Spinner />
         ) : featured.length === 0 ? (
-          <p className="card p-8 text-center text-slate-500">No listings yet — be the first agency to add one.</p>
+          <p className="card p-8 text-center text-slate-500">No listings yet be the first agency to add one.</p>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {featured.map((p) => (

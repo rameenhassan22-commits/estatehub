@@ -7,10 +7,6 @@ import Pagination from "../components/ui/Pagination";
 import { Spinner, EmptyState } from "../components/ui/Feedback";
 import { initials } from "../lib/format";
 
-/**
- * URL-PATH TENANCY: /agency/prime-estate shows ONLY that agency's listings.
- * (The alternative is subdomain tenancy: prime-estate.estatehub.com - same idea, but needs wildcard DNS.)
- */
 export default function AgencyPage() {
   const { slug } = useParams();
   const [tenant, setTenant] = useState(null);

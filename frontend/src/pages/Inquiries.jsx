@@ -12,12 +12,6 @@ import { Spinner, EmptyState } from "../components/ui/Feedback";
 import { formatDate, formatPrice } from "../lib/format";
 import { ROLES } from "../lib/roles";
 
-/**
- * ONE page, TWO audiences. The API already returns only what the role may see:
- *   customer     -> the inquiries they sent (read-only status)
- *   agency_admin -> all inquiries of the agency (can change status)
- *   agent        -> inquiries about their own listings (can change status)
- */
 export default function Inquiries() {
   const { user } = useAuth();
   const isCustomer = user.role === ROLES.CUSTOMER;

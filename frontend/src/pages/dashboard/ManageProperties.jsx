@@ -60,7 +60,7 @@ export default function ManageProperties() {
     <>
       <PageHeader
         title="Properties"
-        subtitle={isAdmin ? "Every listing of your agency." : "Every listing of your agency — you can edit the ones you created."}
+        subtitle={isAdmin ? "Every listing of your agency." : "Every listing of your agency you can edit the ones you created."}
         action={<Link to="/dashboard/properties/new" className="btn btn-primary"><Plus size={18} /> Add property</Link>}
       />
 

@@ -17,7 +17,7 @@ export default function ProtectedRoute({ roles }) {
         <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-red-50 text-red-600">
           <ShieldAlert size={30} />
         </div>
-        <h1 className="text-3xl font-bold">403 — Access denied</h1>
+        <h1 className="text-3xl font-bold">403 Access denied</h1>
         <p className="max-w-md text-slate-500">Your role ({user.role.replace("_", " ")}) is not allowed to open this page.</p>
         <Link to={homePathFor(user.role)} className="btn btn-primary mt-2">
           Go to my home

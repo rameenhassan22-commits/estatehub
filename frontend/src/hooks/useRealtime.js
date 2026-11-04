@@ -4,11 +4,6 @@ import toast from "react-hot-toast";
 import { createSocket } from "../lib/socket";
 import { inquiryReceived, inquiryChanged, setConnected } from "../features/notifications/notificationsSlice";
 
-/**
- * Mount ONCE (in App). Opens a socket while someone is logged in and closes it on logout.
- *   staff    <- "inquiry:new"      -> toast + sidebar badge
- *   customer <- "inquiry:updated"  -> toast ("Your inquiry is now: contacted")
- */
 export const useRealtime = () => {
   const dispatch = useDispatch();
   const token = useSelector((s) => s.auth.token);

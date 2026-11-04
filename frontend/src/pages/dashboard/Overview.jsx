@@ -101,7 +101,7 @@ export default function Overview() {
 
             <section className="card p-5">
               <h2 className="text-lg font-bold">Your public page</h2>
-              <p className="mt-1 text-sm text-slate-500">Share this link — it shows only your agency's available listings.</p>
+              <p className="mt-1 text-sm text-slate-500">Share this link it shows only your agency's available listings.</p>
               {tenant?.slug && (
                 <Link to={`/agency/${tenant.slug}`} className="mt-4 flex items-center gap-2 rounded-xl bg-slate-50 p-3 text-sm font-medium break-all text-brand-800 hover:bg-brand-50">
                   <Globe size={16} className="shrink-0" /> /agency/{tenant.slug}

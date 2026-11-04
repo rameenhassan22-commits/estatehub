@@ -8,7 +8,7 @@ const YEAR = new Date().getFullYear();
 
 const POINTS = [
   { icon: Building2, text: "Every agency gets its own private workspace" },
-  { icon: Users, text: "Admins, agents and customers — each sees only what they should" },
+  { icon: Users, text: "Admins, agents and customers each sees only what they should" },
   { icon: ShieldCheck, text: "Secure sign-in with hashed passwords and JWT sessions" },
   { icon: Zap, text: "Manage listings and inquiries from one dashboard" },
 ];
