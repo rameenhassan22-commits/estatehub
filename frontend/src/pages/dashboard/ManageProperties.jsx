@@ -11,6 +11,7 @@ import { Spinner, EmptyState } from "../../components/ui/Feedback";
 import { formatPrice, capitalize } from "../../lib/format";
 import { ROLES } from "../../lib/roles";
 
+
 export default function ManageProperties() {
   const { user } = useAuth();
   const isAdmin = user.role === ROLES.AGENCY_ADMIN;

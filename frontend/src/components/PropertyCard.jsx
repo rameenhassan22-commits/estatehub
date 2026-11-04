@@ -13,10 +13,10 @@ export default function PropertyCard({ property, showStatus = false }) {
   return (
     <Link
       to={`/properties/${property._id}`}
-      className="group card flex flex-col overflow-hidden transition hover:-translate-y-0.5 hover:shadow-lg"
+      className="group card flex flex-col overflow-hidden transition duration-200 hover:-translate-y-1 hover:border-brand-300 hover:shadow-xl hover:shadow-brand-900/15"
     >
       {/* No photo upload yet -> a branded placeholder. Replace with <img> when you add image uploads. */}
-      <div className="relative flex h-40 items-center justify-center bg-linear-to-br from-brand-100 via-brand-50 to-sand-100">
+      <div className="relative flex h-40 items-center justify-center border-b border-brand-100 bg-linear-to-br from-brand-100 via-brand-50 to-sand-100">
         <Icon size={56} className="text-brand-600/40 transition group-hover:scale-110" strokeWidth={1.4} />
         <span className="absolute top-3 left-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-brand-800 shadow-sm">
           For {property.purpose}
@@ -31,7 +31,7 @@ export default function PropertyCard({ property, showStatus = false }) {
           <MapPin size={14} className="shrink-0" /> {place || "Location not set"}
         </p>
 
-        <div className="mt-4 flex items-center gap-4 border-t border-slate-100 pt-3 text-sm text-slate-600">
+        <div className="mt-4 flex items-center gap-4 border-t border-slate-200 pt-3 text-sm text-slate-600">
           <span className="font-medium">{capitalize(property.propertyType)}</span>
           {property.bedrooms > 0 && (
             <span className="flex items-center gap-1">

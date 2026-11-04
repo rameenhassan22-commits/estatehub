@@ -25,6 +25,7 @@ import ManageProperties from "./pages/dashboard/ManageProperties";
 import PropertyForm from "./pages/dashboard/PropertyForm";
 import Team from "./pages/dashboard/Team";
 import { useRealtime } from "./hooks/useRealtime";
+import InfoPage from "./pages/InfoPage";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -54,6 +55,9 @@ export default function App() {
           <Route path="/properties" element={<Properties />} />
           <Route path="/properties/:id" element={<PropertyDetail />} />
           <Route path="/agency/:slug" element={<AgencyPage />} />
+          <Route path="/contact" element={<InfoPage />} />
+          <Route path="/privacy" element={<InfoPage />} />
+          <Route path="/terms" element={<InfoPage />} />
 
           {/* customer only */}
           <Route element={<ProtectedRoute roles={[ROLES.CUSTOMER]} />}>

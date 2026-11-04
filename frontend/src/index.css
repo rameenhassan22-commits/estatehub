@@ -55,7 +55,7 @@
   .input-error {
     @apply border-red-500 focus:border-red-500 focus:ring-red-500/15;
   }
-  .card {
-    @apply rounded-2xl border border-slate-200 bg-white shadow-sm;
+    .card {
+    @apply rounded-2xl border border-slate-300 bg-white shadow-lg shadow-slate-900/15;
   }
 }

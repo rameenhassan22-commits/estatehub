@@ -8,7 +8,7 @@ import { initials } from "../lib/format";
 
 const linkClass = ({ isActive }) =>
   `rounded-lg px-3 py-2 text-sm font-medium transition ${
-    isActive ? "bg-brand-50 text-brand-800" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+    isActive ? "bg-brand-700 text-white shadow-sm" : "text-slate-600 hover:bg-brand-50 hover:text-brand-800"
   }`;
 
 export default function Navbar() {
