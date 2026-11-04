@@ -80,7 +80,18 @@ export const getProperty = async (req, res) => {
 
   res.json(property);
 };
+// GET /api/properties/manage/:id  -> used by the dashboard EDIT page
+// Searched by id AND tenantId: another agency's property is simply "not found"
+export const getManagedProperty = async (req, res) => {
+  const property = await Property.findOne({ _id: req.params.id, tenantId: req.user.tenantId });
+  if (!property) return res.status(404).json({ message: "Property not found" });
 
+  // Agents can only open their own listings
+  if (req.user.role === "agent" && String(property.createdBy) !== String(req.user._id)) {
+    return res.status(404).json({ message: "Property not found" });
+  }
+  res.json(property);
+};
 // 3. POST /api/properties (agency_admin, agent)
 export const createProperty = async (req, res) => {
   const property = await Property.create({

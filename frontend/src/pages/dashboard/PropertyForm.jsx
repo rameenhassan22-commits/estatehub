@@ -47,7 +47,7 @@ export default function PropertyForm() {
   useEffect(() => {
     if (!isEdit) return;
     api
-      .get(`/properties/${id}`)
+      .get(`/properties/manage/${id}`)
       .then(({ data: p }) =>
         reset({
           title: p.title,
@@ -63,9 +63,12 @@ export default function PropertyForm() {
           address: p.location?.address || "",
         })
       )
-      .catch(() => setFormError("Could not load this property."))
+      .catch(() => {
+        toast.error("Property not found", { id: "property-not-found" });
+        navigate("/dashboard/properties", { replace: true });
+      })
       .finally(() => setLoading(false));
-  }, [id, isEdit, reset]);
+  }, [id, isEdit, reset, navigate]);
 
   const onSubmit = async (v) => {
     setFormError("");

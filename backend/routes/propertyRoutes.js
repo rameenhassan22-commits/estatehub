@@ -5,6 +5,7 @@ import { validate } from "../middleware/validate.js";
 import {
   listProperties,
   getProperty,
+  getManagedProperty,
   createProperty,
   updateProperty,
   deleteProperty,
@@ -18,6 +19,14 @@ import {
 
 const router = Router();
 
+// Dashboard edit page: tenant-scoped
+router.get(
+  "/manage/:id",
+  protect,
+  authorize("agency_admin", "agent"),
+  validate(idParamSchema, "params"),
+  getManagedProperty
+);
 // Public routes (optionalAuth: staff are recognised if logged in, guests are fine too)
 router.get("/", optionalAuth, validate(listPropertiesQuerySchema, "query"), listProperties);
 router.get("/:id", optionalAuth, validate(idParamSchema, "params"), getProperty);
